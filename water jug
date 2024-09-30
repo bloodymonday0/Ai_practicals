@@ -1,0 +1,98 @@
+from collections import deque
+# Function to check if the target amount is measurable
+def is_measurable(m, n, d):
+ if d % gcd(m, n) != 0:
+ return False
+ return d <= max(m, n)
+# Function to calculate the greatest common divisor (gcd) of two
+numbers
+def gcd(a, b):
+ while b:
+ a, b = b, a % b
+ return a
+# Function to implement BFS to solve the water jug problem
+def water_jug_solver(m, n, d):
+ if not is_measurable(m, n, d):
+ print("It is not possible to measure the desired amount.")
+ return
+
+ # To store the visited states
+ visited = set()
+ # Queue for BFS (holds states of the form (jug1, jug2))
+ queue = deque([(0, 0)])
+ # To keep track of the path
+ parent = {}
+ while queue:
+ jug1, jug2 = queue.popleft()
+
+ # If we reached the solution, backtrack to print the solution
+ if jug1 == d or jug2 == d:
+ print_solution(jug1, jug2, parent)
+ return
+
+ # If this state has already been visited, skip it
+ if (jug1, jug2) in visited:
+ continue
+
+ visited.add((jug1, jug2))
+
+ # Generate all possible next states and add them to the queue
+ # Fill jug1
+ if (m, jug2) not in visited:
+ queue.append((m, jug2))
+ parent[(m, jug2)] = (jug1, jug2)
+
+ # Fill jug2
+ if (jug1, n) not in visited:
+ queue.append((jug1, n))
+ parent[(jug1, n)] = (jug1, jug2)
+
+ # Empty jug1
+ if (0, jug2) not in visited:
+ queue.append((0, jug2))
+ parent[(0, jug2)] = (jug1, jug2)
+
+ # Empty jug2
+ if (jug1, 0) not in visited:
+ queue.append((jug1, 0))
+ parent[(jug1, 0)] = (jug1, jug2)
+
+ # Pour from jug1 to jug2
+ pour_to_jug2 = min(jug1, n - jug2)
+ new_jug1 = jug1 - pour_to_jug2
+ new_jug2 = jug2 + pour_to_jug2
+ if (new_jug1, new_jug2) not in visited:
+ queue.append((new_jug1, new_jug2))
+ parent[(new_jug1, new_jug2)] = (jug1, jug2)
+
+ # Pour from jug2 to jug1
+ pour_to_jug1 = min(jug2, m - jug1)
+ new_jug1 = jug1 + pour_to_jug1
+ new_jug2 = jug2 - pour_to_jug1
+ if (new_jug1, new_jug2) not in visited:
+ queue.append((new_jug1, new_jug2))
+parent[(new_jug1, new_jug2)] = (jug1, jug2)
+
+ print("It is not possible to measure the desired amount.")
+# Function to print the solution by backtracking the states
+def print_solution(jug1, jug2, parent):
+ path = []
+ state = (jug1, jug2)
+ while state in parent:
+ path.append(state)
+ state = parent[state]
+ path.append((0, 0)) # Starting point
+ path.reverse()
+
+ for i, step in enumerate(path):
+ print(f"Step {i}: Jug1 = {step[0]} liters, Jug2 = {step[1]}
+liters")
+# Example usage
+if __name__ == "__main__":
+ # Jug capacities
+ m = 5 # Jug 1 capacity (in liters)
+ n = 3 # Jug 2 capacity (in liters)
+ # Desired amount
+ d = 4 # Desired liters of water
+
+ water_jug_solver(m, n, d)
