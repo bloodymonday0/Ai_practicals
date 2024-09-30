@@ -1,0 +1,66 @@
+def is_valid_state(missionaries, cannibals):
+ if missionaries < 0 or cannibals < 0 or missionaries > 3 or
+cannibals > 3:
+ return False
+ if missionaries > 0 and missionaries < cannibals:
+ return False
+ if (3 - missionaries) > 0 and (3 - missionaries) < (3 -
+cannibals):
+ return False
+ return True
+# Function to generate successors of a given state
+def generate_successors(state):
+ successors = []
+ m, c, boat = state
+ moves = [(1, 0), (2, 0), (0, 1), (0, 2), (1, 1)] # Possible boat
+moves
+ if boat == 1: # Boat on left bank
+ for move in moves:
+ new_m, new_c = m - move[0], c - move[1]
+ if is_valid_state(new_m, new_c):
+ successors.append((new_m, new_c, 0)) # Move boat to
+the right bank
+ else: # Boat on right bank
+ for move in moves:
+ new_m, new_c = m + move[0], c + move[1]
+ if is_valid_state(new_m, new_c):
+ successors.append((new_m, new_c, 1)) # Move boat to
+the left bank
+ return successors
+# BFS algorithm to solve the Missionaries and Cannibals problem
+def missionaries_and_cannibals():
+ start_state = (3, 3, 1) # Initial state: 3 missionaries, 3
+cannibals, boat on left bank
+ goal_state = (0, 0, 0) # Goal state: everyone on the right bank
+
+ queue = deque([(start_state, [])]) # Queue to store states and
+the path to reach them
+ visited = set() # Set to store visited states
+ while queue:
+ state, path = queue.popleft()
+ if state in visited:
+ continue
+ visited.add(state)
+  # If the goal state is reached, return the path
+ if state == goal_state:
+ return path + [state]
+ # Generate and explore all valid successors of the current
+state
+ for successor in generate_successors(state):
+ queue.append((successor, path + [state]))
+ return None # No solution found
+# Function to print the solution path
+def print_solution(solution):
+ if not solution:
+ print("No solution found.")
+ return
+ print("Solution path:")
+ for step in solution:
+ m, c, b = step
+ boat_position = "Left" if b == 1 else "Right"
+ print(f"Missionaries: {m}, Cannibals: {c}, Boat:
+{boat_position}")
+# Main function to solve the problem and print the solution
+if __name__ == "__main__":
+ solution = missionaries_and_cannibals()
+ print_solution(solution)
