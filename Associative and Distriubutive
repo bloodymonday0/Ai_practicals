@@ -1,0 +1,45 @@
+Associative
+# Example for addition
+def associative_addition(a, b, c):
+ left_associative = (a + b) + c
+ right_associative = a + (b + c)
+ print(f"Left associative (a + b) + c: {left_associative}")
+ print(f"Right associative a + (b + c): {right_associative}")
+ return left_associative == right_associative
+# Example for multiplication
+def associative_multiplication(a, b, c):
+ left_associative = (a * b) * c
+ right_associative = a * (b * c)
+ print(f"Left associative (a * b) * c: {left_associative}")
+ print(f"Right associative a * (b * c): {right_associative}")
+ return left_associative == right_associative
+# Test for associative property
+a, b, c = 2, 3, 4
+print("Addition is associative:", associative_addition(a, b, c))
+print("Multiplication is associative:", associative_multiplication(a,
+b, c))
+
+
+Distributive
+
+
+def distributive_multiplication_addition(a, b, c):
+ left_side = a * (b + c) # a * (b + c)
+ right_side = (a * b) + (a * c) # (a * b) + (a * c)
+
+ print(f"Left side a * (b + c): {left_side}")
+ print(f"Right side (a * b) + (a * c): {right_side}")
+ return left_side == right_side
+def distributive_multiplication_subtraction(a, b, c):
+ left_side = a * (b - c) # a * (b - c)
+ right_side = (a * b) - (a * c) # (a * b) - (a * c)
+
+ print(f"Left side a * (b - c): {left_side}")
+ print(f"Right side (a * b) - (a * c): {right_side}")
+ return left_side == right_side
+# Test for arithmetic distributive property
+a, b, c = 5, 3, 2
+print("Multiplication over Addition is distributive:",
+distributive_multiplication_addition(a, b, c))
+print("Multiplication over Subtraction is distributive:",
+distributive_multiplication_subtraction(a, b, c))
